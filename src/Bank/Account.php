@@ -24,25 +24,6 @@ final readonly class Account
     }
 
     /**
-     * Opérations regroupées par jour, du plus récent au plus ancien.
-     *
-     * @return list<array{date: \DateTimeImmutable, items: list<Transaction>}>
-     */
-    public function groupedTransactions(): array
-    {
-        $groups = [];
-        foreach ($this->transactions as $transaction) {
-            $key = $transaction->date->format('Y-m-d');
-            if (!isset($groups[$key])) {
-                $groups[$key] = ['date' => $transaction->date, 'items' => []];
-            }
-            $groups[$key]['items'][] = $transaction;
-        }
-
-        return array_values($groups);
-    }
-
-    /**
      * IBAN masqué façon relevé : FR76 •••• •••• 4821.
      */
     public function maskedIban(): string
