@@ -13,6 +13,7 @@ install: ## Installe les dépendances PHP, JS et Playwright
 	symfony composer install
 	npm install
 	npx playwright install chromium
+	symfony console tailwind:build
 
 ## Serveur
 
