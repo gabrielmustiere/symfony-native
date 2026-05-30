@@ -29,6 +29,15 @@ final class PageController extends AbstractController
         return $this->render('page/design-system.html.twig');
     }
 
+    #[Route(
+        path: '/webauthn',
+        name: 'app_webauthn'
+    )]
+    public function webauthn(): Response
+    {
+        return $this->render('page/webauthn.html.twig');
+    }
+
     /**
      * @throws TransportExceptionInterface
      */

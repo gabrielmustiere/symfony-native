@@ -126,6 +126,13 @@
                 </a>
             </li>
             <li>
+                <a href="{{ path('app_webauthn') }}"
+                   class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+                    <twig:ux:icon name="tabler:fingerprint" class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                    <span class="ml-3">WebAuthn</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ path('app_test_email') }}"
                    class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
                     <twig:ux:icon name="tabler:mail" class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
