@@ -1,6 +1,6 @@
 proxy:
     domains:
-        - template
+        - symfony-native
 
 workers:
     docker_compose: ~
