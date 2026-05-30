@@ -1,0 +1,45 @@
+{% extends 'bank/base.html.twig' %}
+
+{% block title %}{{ account.name }} · Nevertime Solutions{% endblock %}
+
+{% block body %}
+    {# Hero compte #}
+    <header class="bg-gradient-to-br from-[#0a2540] to-[#16386b] pb-8 pt-[calc(1rem+env(safe-area-inset-top))] text-white">
+      <div class="mx-auto max-w-2xl px-5">
+        <a href="{{ path('app_bank_home') }}" class="-ml-2 inline-flex items-center gap-1 rounded-lg p-2 text-sm text-white/80">
+            <twig:ux:icon name="tabler:chevron-left" class="size-5"/>
+            Comptes
+        </a>
+
+        <div class="mt-4 flex items-center gap-3">
+            <span class="grid size-10 place-items-center rounded-full bg-white/15">
+                <twig:ux:icon name="{{ account.icon }}" class="size-5.5"/>
+            </span>
+            <div>
+                <p class="font-display font-semibold">{{ account.name }}</p>
+                <p class="text-xs text-white/60">{{ account.type }}</p>
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <p class="text-xs uppercase tracking-wider text-white/50">Solde disponible</p>
+            <p class="mt-1 font-display text-4xl font-bold tracking-tight">{{ account.balanceCents|money }}</p>
+            <p class="mt-2 font-mono text-xs text-white/50">{{ account.maskedIban }}</p>
+        </div>
+      </div>
+    </header>
+
+    {# Opérations groupées par jour #}
+    <section class="mx-auto max-w-2xl px-4 pt-5">
+        {% for group in account.groupedTransactions %}
+            <h2 class="mb-2 mt-4 px-1 font-display text-xs font-semibold uppercase tracking-wider text-slate-400 first:mt-0">
+                {{ group.date|day_label }}
+            </h2>
+            <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
+                {% for tx in group.items %}
+                    {% include 'bank/_transaction.html.twig' with { tx: tx, divider: not loop.last } %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}

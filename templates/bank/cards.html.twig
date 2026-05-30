@@ -1,0 +1,83 @@
+{% extends 'bank/base.html.twig' %}
+
+{% block title %}Mes cartes · Nevertime Solutions{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-2xl">
+    <header class="px-5 pt-[calc(1.5rem+env(safe-area-inset-top))]">
+        <h1 class="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Ma carte</h1>
+        <p class="mt-0.5 text-sm text-slate-500">Visa Premier · Compte courant</p>
+    </header>
+
+    {# Carte visuelle #}
+    <section class="px-5 pt-5">
+        <div class="relative w-full overflow-hidden rounded-3xl bg-gradient-to-br from-[#0a2540] via-[#13315c] to-[#16386b] p-5 text-white shadow-lg">
+            <div class="flex items-start justify-between">
+                <span class="font-display text-sm font-semibold tracking-wide">Nevertime Solutions</span>
+                <twig:ux:icon name="tabler:wifi" class="size-6 rotate-90 text-white/70"/>
+            </div>
+            <div class="mt-6 h-8 w-11 rounded-md bg-gradient-to-br from-amber-200 to-amber-400/80"></div>
+            <p class="mt-5 whitespace-nowrap font-mono text-lg tracking-[0.15em]">••••&nbsp;••••&nbsp;••••&nbsp;4821</p>
+            <div class="mt-5 flex items-end justify-between gap-2">
+                <div>
+                    <p class="text-[0.6rem] uppercase tracking-wider text-white/50">Titulaire</p>
+                    <p class="font-display text-sm font-medium uppercase tracking-wide">{{ customer.fullName }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[0.6rem] uppercase tracking-wider text-white/50">Expire</p>
+                    <p class="font-mono text-sm">09/28</p>
+                </div>
+                <span class="font-display text-lg font-bold italic tracking-tight">VISA</span>
+            </div>
+        </div>
+    </section>
+
+    {# Plafonds #}
+    <section class="px-5 pt-6">
+        <h2 class="mb-2 px-1 font-display text-xs font-semibold uppercase tracking-wider text-slate-400">Plafonds (30 jours glissants)</h2>
+        <div class="space-y-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
+            {% set limits = [
+                { label: 'Paiements', used: 1240, total: 3000, pct: 41 },
+                { label: 'Retraits', used: 260, total: 800, pct: 32 }
+            ] %}
+            {% for limit in limits %}
+                <div>
+                    <div class="mb-1.5 flex items-baseline justify-between">
+                        <span class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ limit.label }}</span>
+                        <span class="font-display text-sm tabular-nums text-slate-900 dark:text-white">
+                            {{ (limit.used * 100)|money }} <span class="text-slate-400">/ {{ (limit.total * 100)|money }}</span>
+                        </span>
+                    </div>
+                    <div class="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                        <div class="h-full rounded-full bg-[#16386b] dark:bg-sky-500" style="width: {{ limit.pct }}%"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# Réglages carte #}
+    <section class="px-5 pt-6">
+        <h2 class="mb-2 px-1 font-display text-xs font-semibold uppercase tracking-wider text-slate-400">Réglages</h2>
+        <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
+            {% set settings = [
+                { label: 'Paiements sans contact', icon: 'tabler:wifi', on: true },
+                { label: 'Paiements à l\'étranger', icon: 'tabler:world', on: true },
+                { label: 'Paiements en ligne', icon: 'tabler:shopping-cart', on: true },
+                { label: 'Verrouiller la carte', icon: 'tabler:lock', on: false }
+            ] %}
+            {% for setting in settings %}
+                <div class="flex items-center gap-3 px-4 py-3.5 {{ not loop.last ? 'border-b border-slate-100 dark:border-slate-800' }}">
+                    <span class="grid size-9 shrink-0 place-items-center rounded-full bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-300">
+                        <twig:ux:icon name="{{ setting.icon }}" class="size-5"/>
+                    </span>
+                    <span class="flex-1 text-sm font-medium text-slate-700 dark:text-slate-200">{{ setting.label }}</span>
+                    <span class="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition {{ setting.on ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-700' }}">
+                        <span class="inline-block size-5 transform rounded-full bg-white shadow transition {{ setting.on ? 'translate-x-5' : 'translate-x-0.5' }}"></span>
+                    </span>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+    </div>
+{% endblock %}

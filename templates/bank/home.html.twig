@@ -1,0 +1,84 @@
+{% extends 'bank/base.html.twig' %}
+
+{% block title %}Mes comptes · Nevertime Solutions{% endblock %}
+
+{% block body %}
+    {# Hero #}
+    <header class="bg-gradient-to-br from-[#0a2540] to-[#16386b] pb-8 pt-[calc(1.5rem+env(safe-area-inset-top))] text-white">
+      <div class="mx-auto max-w-2xl px-5">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="grid size-7 place-items-center rounded-md bg-white/15 text-sm font-bold">N</span>
+                <span class="font-display text-sm font-semibold tracking-wide">Nevertime Solutions</span>
+            </div>
+            <a href="{{ path('app_bank_profile') }}"
+               class="grid size-9 place-items-center rounded-full bg-white/15 text-sm font-semibold">
+                {{ customer.initials }}
+            </a>
+        </div>
+
+        <div class="mt-7">
+            <p class="text-sm text-white/70">Bonjour {{ customer.firstName }},</p>
+            <p class="mt-1 text-xs uppercase tracking-wider text-white/50">Patrimoine total</p>
+            <p class="mt-1 font-display text-4xl font-bold tracking-tight">{{ total|money }}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="mx-auto max-w-2xl">
+    {# Comptes #}
+    <section class="px-4 -mt-4">
+        <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
+            {% for account in accounts %}
+                <a href="{{ path('app_bank_account', { id: account.id }) }}"
+                   class="flex items-center gap-3 px-4 py-3.5 transition hover:bg-slate-50 active:bg-slate-100 dark:hover:bg-slate-800/60 {{ not loop.last ? 'border-b border-slate-100 dark:border-slate-800' }}">
+                    <span class="grid size-11 shrink-0 place-items-center rounded-full bg-[#0a2540]/5 text-[#0a2540] dark:bg-white/10 dark:text-white">
+                        <twig:ux:icon name="{{ account.icon }}" class="size-5.5"/>
+                    </span>
+                    <span class="min-w-0 flex-1">
+                        <span class="block truncate font-semibold text-slate-900 dark:text-white">{{ account.name }}</span>
+                        <span class="block truncate text-xs text-slate-400">{{ account.maskedIban }}</span>
+                    </span>
+                    <span class="text-right">
+                        <span class="block font-display font-semibold tabular-nums text-slate-900 dark:text-white">{{ account.balanceCents|money }}</span>
+                    </span>
+                    <twig:ux:icon name="tabler:chevron-right" class="size-4 shrink-0 text-slate-300"/>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# Raccourcis #}
+    <section class="mt-6 px-4">
+        <div class="grid grid-cols-3 gap-3">
+            {% set shortcuts = [
+                { label: 'Virement', icon: 'tabler:arrows-exchange' },
+                { label: 'Bénéficiaires', icon: 'tabler:users-plus' },
+                { label: 'RIB', icon: 'tabler:file-text' }
+            ] %}
+            {% for shortcut in shortcuts %}
+                <div class="flex flex-col items-center gap-2 rounded-2xl bg-white py-4 text-center shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
+                    <span class="grid size-10 place-items-center rounded-full bg-[#0a2540]/5 text-[#0a2540] dark:bg-white/10 dark:text-white">
+                        <twig:ux:icon name="{{ shortcut.icon }}" class="size-5"/>
+                    </span>
+                    <span class="text-xs font-medium text-slate-600 dark:text-slate-300">{{ shortcut.label }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# Dernières opérations #}
+    {% set recent = accounts[0].transactions|slice(0, 4) %}
+    <section class="mt-6 px-4">
+        <div class="mb-2 flex items-center justify-between px-1">
+            <h2 class="font-display text-sm font-semibold uppercase tracking-wider text-slate-500">Dernières opérations</h2>
+            <a href="{{ path('app_bank_account', { id: accounts[0].id }) }}" class="text-xs font-medium text-[#16386b] dark:text-sky-400">Tout voir</a>
+        </div>
+        <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
+            {% for tx in recent %}
+                {% include 'bank/_transaction.html.twig' with { tx: tx, divider: not loop.last } %}
+            {% endfor %}
+        </div>
+    </section>
+    </div>
+{% endblock %}

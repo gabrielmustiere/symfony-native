@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0a2540">
+    <title>{% block title %}Nevertime Solutions{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=PT+Mono&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><rect width=%22128%22 height=%22128%22 rx=%2224%22 fill=%22%230a2540%22/><text y=%221.05em%22 x=%220.5em%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2272%22 font-weight=%22700%22 fill=%22%23ffffff%22>N</text></svg>">
+    {% block stylesheets %}{% endblock %}
+
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body class="min-h-full bg-slate-50 font-body text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200">
+
+{% include 'common/flash-messages.html.twig' %}
+
+{% set route = app.request.attributes.get('_route') %}
+{% set nav = [
+    { label: 'Comptes', icon: 'tabler:layout-grid', route: 'app_bank_home', active: route in ['app_bank_home', 'app_bank_account'] },
+    { label: 'Cartes', icon: 'tabler:credit-card', route: 'app_bank_cards', active: route == 'app_bank_cards' },
+    { label: 'WebAuthn', icon: 'tabler:fingerprint', route: 'app_webauthn', active: route == 'app_webauthn' },
+    { label: 'Profil', icon: 'tabler:user', route: 'app_bank_profile', active: route == 'app_bank_profile' }
+] %}
+
+{# Sidebar (desktop) #}
+<aside class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-slate-200 bg-white px-3 py-5 md:flex dark:border-slate-800 dark:bg-slate-900">
+    <a href="{{ path('app_bank_home') }}" class="mb-6 flex items-center gap-2.5 px-2">
+        <span class="grid size-9 place-items-center rounded-lg bg-[#0a2540] text-sm font-bold text-white">N</span>
+        <span class="font-display text-base font-semibold tracking-tight text-slate-900 dark:text-white">Nevertime Solutions</span>
+    </a>
+    <nav class="space-y-1">
+        {% for item in nav %}
+            <a href="{{ path(item.route) }}"
+               class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition {{ item.active ? 'bg-[#0a2540]/5 text-[#0a2540] dark:bg-white/10 dark:text-white' : 'text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800' }}">
+                <twig:ux:icon name="{{ item.icon }}" class="size-5.5"/>
+                {{ item.label }}
+            </a>
+        {% endfor %}
+    </nav>
+    <a href="{{ path('app_logout') }}"
+       class="mt-auto flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-rose-600 transition hover:bg-rose-50 dark:hover:bg-rose-950/40">
+        <twig:ux:icon name="tabler:logout" class="size-5.5"/>
+        Se déconnecter
+    </a>
+</aside>
+
+<main class="pb-[calc(5rem+env(safe-area-inset-bottom))] md:pl-64 md:pb-12">
+    {% block body %}{% endblock %}
+</main>
+
+{# Barre d'onglets (mobile) #}
+<nav class="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur pb-[env(safe-area-inset-bottom)] md:hidden dark:border-slate-800 dark:bg-slate-900/95">
+    <div class="mx-auto flex max-w-lg items-stretch">
+        {% for item in nav %}
+            <a href="{{ path(item.route) }}"
+               class="flex flex-1 flex-col items-center gap-1 py-2.5 text-xs font-medium transition {{ item.active ? 'text-[#0a2540] dark:text-white' : 'text-slate-400 dark:text-slate-500' }}">
+                <twig:ux:icon name="{{ item.icon }}" class="size-6"/>
+                <span>{{ item.label }}</span>
+            </a>
+        {% endfor %}
+    </div>
+</nav>
+
+</body>
+</html>

@@ -12,15 +12,6 @@ use Symfony\Component\Routing\Attribute\Route;
 final class PageController extends AbstractController
 {
     #[Route(
-        path: '/',
-        name: 'app_page'
-    )]
-    public function index(): Response
-    {
-        return $this->render('page/index.html.twig');
-    }
-
-    #[Route(
         path: '/design-system',
         name: 'app_design_system'
     )]
