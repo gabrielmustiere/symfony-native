@@ -234,3 +234,22 @@
     --color-dark-subtle: var(--color-gray-700);
     --color-dark-backdrop: var(--color-gray-950);
 }
+
+@layer base {
+    /* Mobile-first / Hotwire Native : désactive le zoom au double-tap
+       (conserve le pinch-to-zoom pour l'accessibilité). */
+    html {
+        touch-action: manipulation;
+    }
+
+    /* Évite le scroll horizontal sur iOS (WKWebView) : les éléments `fixed`
+       hors écran (sidebar / drawer off-canvas en `-translate-x-full`) étendent
+       la largeur scrollable sous WebKit, contrairement à Chrome. On clippe
+       l'axe horizontal. `clip` (iOS 16+) ne crée pas de conteneur de scroll ;
+       `hidden` sert de repli pour les versions plus anciennes. */
+    html,
+    body {
+        overflow-x: hidden;
+        overflow-x: clip;
+    }
+}

@@ -20,6 +20,11 @@
 /assets/vendor/
 ###< symfony/asset-mapper ###
 
+###> symfony/ux-native ###
+# Fichiers de path configuration générés par `ux-native:dump` (artefact de build).
+/public/config/
+###< symfony/ux-native ###
+
 .idea
 
 ###> friendsofphp/php-cs-fixer ###
@@ -42,3 +47,13 @@ node_modules
 /playwright/.cache/
 /playwright/.auth/
 .playwright-mcp
+
+# macOS
+.DS_Store
+
+# Xcode (app iOS dans ios/)
+**/xcuserdata/
+*.xcuserstate
+
+# Settings Claude locaux
+**/.claude/settings.local.json

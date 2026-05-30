@@ -41,4 +41,7 @@ return [
         'version' => '4.0.2',
         'type' => 'css',
     ],
+    '@hotwired/hotwire-native-bridge' => [
+        'version' => '1.2.2',
+    ],
 ];

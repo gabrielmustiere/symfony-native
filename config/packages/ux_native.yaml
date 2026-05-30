@@ -1,0 +1,4 @@
+ux_native:
+    # Répertoire où `ux-native:dump` écrit les fichiers JSON de configuration.
+    # En dev, les configs sont servies dynamiquement (pas besoin de dump).
+    output_dir: '%kernel.project_dir%/public' # valeur par défaut
