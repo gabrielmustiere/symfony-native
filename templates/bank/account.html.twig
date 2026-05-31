@@ -4,7 +4,7 @@
 
 {% block body %}
     {# Hero compte #}
-    <header class="bg-gradient-to-br from-[#0a2540] to-[#16386b] pb-8 pt-[calc(1rem+env(safe-area-inset-top))] text-white">
+    <header class="bg-gradient-to-br from-[#0a2540] to-[#16386b] pb-6 pt-[calc(1rem+env(safe-area-inset-top))] text-white">
       <div class="mx-auto max-w-2xl px-5">
         <a href="{{ path('app_bank_home') }}" class="-ml-2 inline-flex items-center gap-1 rounded-lg p-2 text-sm text-white/80">
             <twig:ux:icon name="tabler:chevron-left" class="size-5"/>
@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="mt-6">
+        <div class="mt-5">
             <p class="text-xs uppercase tracking-wider text-white/50">Solde disponible</p>
             <p class="mt-1 font-display text-4xl font-bold tracking-tight">{{ account.balanceCents|money }}</p>
             <p class="mt-2 font-mono text-xs text-white/50">{{ account.maskedIban }}</p>

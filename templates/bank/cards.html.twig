@@ -4,13 +4,13 @@
 
 {% block body %}
     <div class="mx-auto max-w-2xl">
-    <header class="px-5 pt-[calc(1.5rem+env(safe-area-inset-top))]">
+    <header class="px-5 pt-[calc(1.25rem+env(safe-area-inset-top))]">
         <h1 class="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Ma carte</h1>
         <p class="mt-0.5 text-sm text-slate-500">Visa Premier · Compte courant</p>
     </header>
 
     {# Carte visuelle #}
-    <section class="px-5 pt-5">
+    <section class="px-5 pt-4">
         <div class="relative w-full overflow-hidden rounded-3xl bg-gradient-to-br from-[#0a2540] via-[#13315c] to-[#16386b] p-5 text-white shadow-lg">
             <div class="flex items-start justify-between">
                 <span class="font-display text-sm font-semibold tracking-wide">Nevertime Solutions</span>
@@ -33,9 +33,9 @@
     </section>
 
     {# Plafonds #}
-    <section class="px-5 pt-6">
+    <section class="px-5 pt-4">
         <h2 class="mb-2 px-1 font-display text-xs font-semibold uppercase tracking-wider text-slate-400">Plafonds (30 jours glissants)</h2>
-        <div class="space-y-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
+        <div class="space-y-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
             {% set limits = [
                 { label: 'Paiements', used: 1240, total: 3000, pct: 41 },
                 { label: 'Retraits', used: 260, total: 800, pct: 32 }
@@ -57,7 +57,7 @@
     </section>
 
     {# Réglages carte #}
-    <section class="px-5 pt-6">
+    <section class="px-5 pt-4">
         <h2 class="mb-2 px-1 font-display text-xs font-semibold uppercase tracking-wider text-slate-400">Réglages</h2>
         <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
             {% set settings = [

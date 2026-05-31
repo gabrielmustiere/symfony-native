@@ -4,7 +4,7 @@
 
 {% block body %}
     {# Hero #}
-    <header class="bg-gradient-to-br from-[#0a2540] to-[#16386b] pb-8 pt-[calc(1.5rem+env(safe-area-inset-top))] text-white">
+    <header class="bg-gradient-to-br from-[#0a2540] to-[#16386b] pb-6 pt-[calc(1.25rem+env(safe-area-inset-top))] text-white">
       <div class="mx-auto max-w-2xl px-5">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -17,7 +17,7 @@
             </a>
         </div>
 
-        <div class="mt-7">
+        <div class="mt-5">
             <p class="text-sm text-white/70">Bonjour {{ customer.firstName }},</p>
             <p class="mt-1 text-xs uppercase tracking-wider text-white/50">Patrimoine total</p>
             <p class="mt-1 font-display text-4xl font-bold tracking-tight">{{ total|money }}</p>
@@ -49,7 +49,7 @@
     </section>
 
     {# Raccourcis #}
-    <section class="mt-6 px-4">
+    <section class="mt-4 px-4">
         <div class="grid grid-cols-3 gap-3">
             {% set shortcuts = [
                 { label: 'Virement', icon: 'tabler:arrows-exchange' },
@@ -57,7 +57,7 @@
                 { label: 'RIB', icon: 'tabler:file-text' }
             ] %}
             {% for shortcut in shortcuts %}
-                <div class="flex flex-col items-center gap-2 rounded-2xl bg-white py-4 text-center shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
+                <div class="flex flex-col items-center gap-2 rounded-2xl bg-white py-3.5 text-center shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
                     <span class="grid size-10 place-items-center rounded-full bg-[#0a2540]/5 text-[#0a2540] dark:bg-white/10 dark:text-white">
                         <twig:ux:icon name="{{ shortcut.icon }}" class="size-5"/>
                     </span>
@@ -69,7 +69,7 @@
 
     {# Dernières opérations #}
     {% set recent = accounts[0].transactions|slice(0, 4) %}
-    <section class="mt-6 px-4">
+    <section class="mt-4 px-4">
         <div class="mb-2 flex items-center justify-between px-1">
             <h2 class="font-display text-sm font-semibold uppercase tracking-wider text-slate-500">Dernières opérations</h2>
             <a href="{{ path('app_bank_account', { id: accounts[0].id }) }}" class="text-xs font-medium text-[#16386b] dark:text-sky-400">Tout voir</a>
