@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: help init install down serve stop db-create db-drop db-reset migrate migration fixtures \
-        phpunit playwright phpstan php-cs-fix php-cs-check build quality ci
+        phpunit playwright phpstan php-cs-fix php-cs-check build quality ci prod dev
 
 help: ## Affiche cette aide
 	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) | sort | awk -F ':.*## ' '{printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -14,6 +14,28 @@ install: ## Installe les dépendances PHP, JS et Playwright
 	npm install
 	npx playwright install chromium
 	symfony console tailwind:build
+
+## Environnement
+
+prod: ## Bascule l'app en mode prod (env + build minifié + cache)
+	@grep -q '^APP_ENV=' .env.local 2>/dev/null \
+		&& sed -i '' 's/^APP_ENV=.*/APP_ENV=prod/' .env.local \
+		|| echo 'APP_ENV=prod' >> .env.local
+	@grep -q '^APP_SECRET=' .env.local 2>/dev/null \
+		|| echo "APP_SECRET=$$(openssl rand -hex 16)" >> .env.local
+	symfony console cache:clear --no-debug
+	symfony console tailwind:build --minify
+	symfony console asset-map:compile
+	@echo "✅ Application en mode PROD"
+
+dev: ## Rebascule l'app en mode dev (env + build + cache)
+	@grep -q '^APP_ENV=' .env.local 2>/dev/null \
+		&& sed -i '' 's/^APP_ENV=.*/APP_ENV=dev/' .env.local \
+		|| echo 'APP_ENV=dev' >> .env.local
+	@rm -rf public/assets
+	symfony console cache:clear
+	symfony console tailwind:build
+	@echo "✅ Application en mode DEV"
 
 ## Serveur
 
