@@ -12,12 +12,14 @@ navigationFragmentKtx = "2.6.0"
 navigationUiKtx = "2.6.0"
 hotwire = "1.2.8"
 coreSplashscreen = "1.0.1"
+webkit = "1.14.0"
 
 [libraries]
 hotwire-core = { group = "dev.hotwire", name = "core", version.ref = "hotwire" }
 hotwire-navigation-fragments = { group = "dev.hotwire", name = "navigation-fragments", version.ref = "hotwire" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-webkit = { group = "androidx.webkit", name = "webkit", version.ref = "webkit" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

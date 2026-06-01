@@ -1,4 +1,4 @@
-package com.example.poc_mobile
+package net.technao.poc_mobile
 
 import android.os.Bundle
 import android.view.View
