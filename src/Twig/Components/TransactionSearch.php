@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Twig\Components;
 
-use App\Bank\DemoBankProvider;
 use App\Bank\Transaction;
 use App\Enum\Type\TransactionCategory;
+use App\Search\TransactionDocument;
+use App\Search\TransactionIndex;
+use Meilisearch\Exceptions\CommunicationException;
+use Meilisearch\Exceptions\TimeOutException;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 /**
- * Recherche et filtre réactifs sur les opérations d'un compte de démo.
+ * Recherche et filtre réactifs sur les opérations d'un compte, adossés à Meilisearch.
  */
 #[AsLiveComponent]
 final class TransactionSearch
@@ -35,10 +38,13 @@ final class TransactionSearch
     #[LiveProp(writable: true)]
     public int $limit = self::PAGE_SIZE;
 
-    /** @var list<Transaction>|null */
-    private ?array $filteredCache = null;
+    /** @var array{hits: list<array<string, mixed>>, totalHits: int}|null */
+    private ?array $resultCache = null;
 
-    public function __construct(private readonly DemoBankProvider $bank)
+    /** Vrai si Meilisearch n'a pas pu être joint (conteneur arrêté, timeout). */
+    private bool $unavailable = false;
+
+    public function __construct(private readonly TransactionIndex $index)
     {
     }
 
@@ -63,17 +69,17 @@ final class TransactionSearch
 
     public function getResultCount(): int
     {
-        return \count($this->filtered());
+        return $this->result()['totalHits'];
     }
 
-    public function getResultSumCents(): int
+    /**
+     * Vrai si la recherche n'a pas pu aboutir faute de joindre Meilisearch.
+     */
+    public function isUnavailable(): bool
     {
-        $sum = 0;
-        foreach ($this->filtered() as $transaction) {
-            $sum += $transaction->amountCents;
-        }
+        $this->result();
 
-        return $sum;
+        return $this->unavailable;
     }
 
     public function getHasMore(): bool
@@ -89,7 +95,8 @@ final class TransactionSearch
     public function getGroups(): array
     {
         $groups = [];
-        foreach (\array_slice($this->filtered(), 0, $this->limit) as $transaction) {
+        foreach ($this->result()['hits'] as $hit) {
+            $transaction = TransactionDocument::toTransaction($hit);
             $key = $transaction->date->format('Y-m-d');
             if (!isset($groups[$key])) {
                 $groups[$key] = ['date' => $transaction->date, 'items' => []];
@@ -101,36 +108,28 @@ final class TransactionSearch
     }
 
     /**
-     * @return list<Transaction>
+     * @return array{hits: list<array<string, mixed>>, totalHits: int}
      */
-    private function filtered(): array
+    private function result(): array
     {
-        if (null !== $this->filteredCache) {
-            return $this->filteredCache;
+        if (null !== $this->resultCache) {
+            return $this->resultCache;
         }
 
-        $account = $this->bank->account($this->accountId);
-        $transactions = null !== $account ? $account->transactions : [];
+        try {
+            return $this->resultCache = $this->index->search(
+                $this->accountId,
+                $this->query,
+                $this->category,
+                $this->limit,
+            );
+        } catch (CommunicationException|TimeOutException) {
+            // Meilisearch injoignable : on dégrade vers un état vide explicite
+            // plutôt que de renvoyer une 500. Les erreurs applicatives
+            // (ApiException) restent propagées, ce sont de vrais bugs.
+            $this->unavailable = true;
 
-        $query = trim($this->query);
-
-        return $this->filteredCache = array_values(array_filter(
-            $transactions,
-            fn (Transaction $t): bool => $this->matches($t, $query),
-        ));
-    }
-
-    private function matches(Transaction $transaction, string $query): bool
-    {
-        if ('' !== $this->category && $transaction->category->value !== $this->category) {
-            return false;
+            return $this->resultCache = ['hits' => [], 'totalHits' => 0];
         }
-
-        if ('' === $query) {
-            return true;
-        }
-
-        return false !== mb_stripos($transaction->label, $query)
-            || false !== mb_stripos($transaction->category->label(), $query);
     }
 }

@@ -24,3 +24,15 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Search\MeilisearchClientFactory:
+        arguments:
+            $url: '%env(MEILISEARCH_URL)%'
+            $masterKey: '%env(MEILISEARCH_MASTER_KEY)%'
+
+    Meilisearch\Client:
+        factory: ['@App\Search\MeilisearchClientFactory', 'create']
+
+    App\Search\TransactionIndex:
+        arguments:
+            $indexName: '%env(MEILISEARCH_INDEX)%'

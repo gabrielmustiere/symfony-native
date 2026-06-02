@@ -14,3 +14,24 @@ services:
       timeout: 3s
       retries: 10
       start_period: 5s
+
+  meilisearch:
+    container_name: template-meilisearch-dev
+    image: 'getmeili/meilisearch:v1.12'
+    ports:
+      - '127.0.0.1:7700:7700'  # HTTP API + dashboard
+    environment:
+      MEILI_MASTER_KEY: masterKeyDevOnly
+      MEILI_ENV: development
+      MEILI_NO_ANALYTICS: 'true'
+    volumes:
+      - 'meili-data:/meili_data'
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '--spider', 'http://localhost:7700/health']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  meili-data:

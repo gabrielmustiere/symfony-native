@@ -1,6 +1,7 @@
 .DEFAULT_GOAL := help
 .PHONY: help init install down serve stop db-create db-drop db-reset migrate migration fixtures \
-        phpunit playwright phpstan php-cs-fix php-cs-check build quality ci prod dev
+        phpunit playwright phpstan php-cs-fix php-cs-check build quality ci prod dev \
+        start search-reindex
 
 help: ## Affiche cette aide
 	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) | sort | awk -F ':.*## ' '{printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -39,11 +40,20 @@ dev: ## Rebascule l'app en mode dev (env + build + cache)
 
 ## Serveur
 
+start: ## Démarre Docker (Mailpit + Meilisearch) puis le serveur Symfony
+	docker compose up -d
+	symfony serve -d
+
 serve: stop ## Lance le serveur Symfony en arrière-plan
 	symfony serve
 
 stop: ## Arrête le serveur Symfony
 	symfony server:stop
+
+## Recherche
+
+search-reindex: ## Régénère et réindexe les 2M transactions dans Meilisearch
+	symfony console app:transactions:reindex --wait
 
 ## Base de données
 

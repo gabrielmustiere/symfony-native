@@ -30,39 +30,43 @@
         </div>
     </div>
 
-    {# Résumé des résultats #}
-    <div class="mt-4 flex items-baseline justify-between px-1">
-        <span class="text-sm font-medium text-slate-500">
-            {{ this.resultCount }} opération{{ this.resultCount > 1 ? 's' }}
-        </span>
-        <span class="font-display text-sm tabular-nums {{ this.resultSumCents >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-200' }}">
-            {{ this.resultSumCents|money(true) }}
-        </span>
-    </div>
-
-    {# Résultats groupés par jour #}
-    {% for group in this.groups %}
-        <h2 class="mb-2 mt-4 px-1 font-display text-xs font-semibold uppercase tracking-wider text-slate-400">
-            {{ group.date|day_label }}
-        </h2>
-        <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
-            {% for tx in group.items %}
-                {% include 'bank/_transaction.html.twig' with { tx: tx, divider: not loop.last } %}
-            {% endfor %}
+    {% if this.unavailable %}
+        <div class="mt-8 flex flex-col items-center gap-2 text-center text-slate-400">
+            <twig:ux:icon name="tabler:cloud-off" class="size-8"/>
+            <p class="text-sm">La recherche est momentanément indisponible. Réessayez dans un instant.</p>
         </div>
     {% else %}
-        <div class="mt-8 flex flex-col items-center gap-2 text-center text-slate-400">
-            <twig:ux:icon name="tabler:search-off" class="size-8"/>
-            <p class="text-sm">Aucune opération ne correspond à votre recherche.</p>
+        {# Résumé des résultats #}
+        <div class="mt-4 flex items-baseline justify-between px-1">
+            <span class="text-sm font-medium text-slate-500">
+                {{ this.resultCount }} opération{{ this.resultCount > 1 ? 's' }}
+            </span>
         </div>
-    {% endfor %}
 
-    {# Pagination #}
-    {% if this.hasMore %}
-        <button type="button" data-action="live#action" data-live-action-param="more"
-                class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#0a2540] ring-1 ring-slate-200 transition hover:bg-slate-50 active:scale-[.99] dark:bg-slate-900 dark:text-white dark:ring-slate-700">
-            <twig:ux:icon name="tabler:chevron-down" class="size-4"/>
-            Afficher plus
-        </button>
+        {# Résultats groupés par jour #}
+        {% for group in this.groups %}
+            <h2 class="mb-2 mt-4 px-1 font-display text-xs font-semibold uppercase tracking-wider text-slate-400">
+                {{ group.date|day_label }}
+            </h2>
+            <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800">
+                {% for tx in group.items %}
+                    {% include 'bank/_transaction.html.twig' with { tx: tx, divider: not loop.last } %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="mt-8 flex flex-col items-center gap-2 text-center text-slate-400">
+                <twig:ux:icon name="tabler:search-off" class="size-8"/>
+                <p class="text-sm">Aucune opération ne correspond à votre recherche.</p>
+            </div>
+        {% endfor %}
+
+        {# Pagination #}
+        {% if this.hasMore %}
+            <button type="button" data-action="live#action" data-live-action-param="more"
+                    class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#0a2540] ring-1 ring-slate-200 transition hover:bg-slate-50 active:scale-[.99] dark:bg-slate-900 dark:text-white dark:ring-slate-700">
+                <twig:ux:icon name="tabler:chevron-down" class="size-4"/>
+                Afficher plus
+            </button>
+        {% endif %}
     {% endif %}
 </div>
