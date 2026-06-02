@@ -291,3 +291,24 @@
         animation: none;
     }
 }
+
+/* Barre de progression Turbo Drive (affichée sur les navigations lentes),
+   accordée à la couleur de marque. */
+.turbo-progress-bar {
+    height: 3px;
+    background: var(--color-violet-500);
+}
+
+/* Transition de page (API View Transitions) déclenchée par Turbo Drive :
+   cross-fade court entre l'ancien et le nouveau contenu. */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none;
+    }
+}
