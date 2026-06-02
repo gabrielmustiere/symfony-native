@@ -1,0 +1,19 @@
+<div class="space-y-5">
+    <header>
+        <h1 class="font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Vos coordonnées</h1>
+        <p class="mt-1 text-sm text-slate-500">Pour sécuriser votre compte et vous tenir informé.</p>
+    </header>
+
+    {{ form_row(form.email, { label: 'Adresse e-mail', attr: { placeholder: 'juliette.lecomte@example.fr', inputmode: 'email', autocomplete: 'email', 'data-test': 'email' } }) }}
+    {{ form_row(form.phone, { label: 'Téléphone', attr: { placeholder: '06 12 34 56 78', inputmode: 'tel', autocomplete: 'tel', 'data-test': 'phone' } }) }}
+
+    <div class="border-t border-slate-100 pt-5 dark:border-slate-800">
+        {{ form_row(form.addressLine, { label: 'Adresse', attr: { placeholder: '24 rue des Lilas', autocomplete: 'address-line1', 'data-test': 'addressLine' } }) }}
+        <div class="grid grid-cols-3 gap-3">
+            {{ form_row(form.postalCode, { label: 'Code postal', attr: { placeholder: '75011', inputmode: 'numeric', autocomplete: 'postal-code', 'data-test': 'postalCode' } }) }}
+            <div class="col-span-2">
+                {{ form_row(form.city, { label: 'Ville', attr: { placeholder: 'Paris', autocomplete: 'address-level2', 'data-test': 'city' } }) }}
+            </div>
+        </div>
+    </div>
+</div>

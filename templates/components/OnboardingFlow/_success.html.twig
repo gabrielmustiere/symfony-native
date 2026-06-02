@@ -1,0 +1,31 @@
+<div class="flex flex-col items-center gap-6 py-10 text-center" data-test="onboarding-success">
+    <span class="onboarding-pop grid size-24 place-items-center rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50">
+        <twig:ux:icon name="tabler:circle-check" class="size-14"/>
+    </span>
+
+    <div>
+        <h1 class="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Bienvenue chez Nevertime&nbsp;Solutions&nbsp;!
+        </h1>
+        <p class="mx-auto mt-2 max-w-sm text-sm text-slate-500">
+            Votre demande d'ouverture de compte est enregistrée. Vous recevrez vos identifiants
+            par e-mail sous 24&nbsp;heures.
+        </p>
+    </div>
+
+    <div class="flex w-full max-w-sm flex-col gap-3 pt-2">
+        <a href="{{ path('app_bank_home') }}"
+           data-test="onboarding-success-home"
+           class="flex items-center justify-center gap-2 rounded-xl bg-[#0a2540] px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0a2540]/90 active:scale-[.99] dark:bg-white dark:text-[#0a2540]">
+            <twig:ux:icon name="tabler:arrow-right" class="size-4"/>
+            Accéder à mon espace
+        </a>
+        <button type="button"
+                data-action="live#action" data-live-action-param="restart"
+                data-test="onboarding-restart"
+                class="flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3.5 text-sm font-semibold text-[#0a2540] ring-1 ring-slate-200 transition hover:bg-slate-50 active:scale-[.99] dark:bg-slate-900 dark:text-white dark:ring-slate-700">
+            <twig:ux:icon name="tabler:rotate" class="size-4"/>
+            Recommencer la démo
+        </button>
+    </div>
+</div>

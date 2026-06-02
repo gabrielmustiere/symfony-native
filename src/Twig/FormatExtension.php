@@ -50,7 +50,7 @@ final class FormatExtension extends AbstractExtension
     /**
      * Libellé de jour en français : « 30 mai 2026 ».
      */
-    public function formatDay(\DateTimeImmutable $date): string
+    public function formatDay(\DateTimeInterface $date): string
     {
         return sprintf(
             '%d %s %d',

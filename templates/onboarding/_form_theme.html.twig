@@ -1,0 +1,45 @@
+{% use "form_div_layout.html.twig" %}
+
+{# Form theme « Paper » dédié à l'onboarding : on hérite du layout de base de
+   Symfony et on n'injecte que les classes Tailwind, via parent(), pour les
+   types réellement utilisés (texte, e-mail, tél, date, select, erreurs). #}
+
+{%- block form_row -%}
+    {%- set row_attr = row_attr|merge({'class': ('mb-4 ' ~ row_attr.class|default(''))|trim}) -%}
+    {{- parent() -}}
+{%- endblock -%}
+
+{%- block form_label -%}
+    {%- set label_attr = label_attr|merge({'class': ('mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300 ' ~ label_attr.class|default(''))|trim}) -%}
+    {{- parent() -}}
+{%- endblock -%}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    {%- if type == 'hidden' -%}
+        {{- parent() -}}
+    {%- else -%}
+        {%- set paper = 'block w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-[#16386b] focus:ring-2 focus:ring-[#16386b]/20 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white' -%}
+        {%- set attr = attr|merge({'class': (paper ~ ' ' ~ attr.class|default(''))|trim}) -%}
+        {{- parent() -}}
+    {%- endif -%}
+{%- endblock -%}
+
+{%- block choice_widget_collapsed -%}
+    {%- set paper = 'block w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#16386b] focus:ring-2 focus:ring-[#16386b]/20 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white' -%}
+    {%- set attr = attr|merge({'class': (paper ~ ' ' ~ attr.class|default(''))|trim}) -%}
+    {{- parent() -}}
+{%- endblock -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <ul class="mt-1.5 space-y-1" data-test="field-errors">
+            {%- for error in errors -%}
+                <li class="flex items-center gap-1.5 text-sm text-rose-600 dark:text-rose-400">
+                    <twig:ux:icon name="tabler:alert-circle" class="size-4 shrink-0"/>
+                    {{ error.message }}
+                </li>
+            {%- endfor -%}
+        </ul>
+    {%- endif -%}
+{%- endblock -%}

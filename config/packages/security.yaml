@@ -40,6 +40,10 @@ security:
         - { path: '^/\.well-known/apple-app-site-association$', roles: PUBLIC_ACCESS }
         - { path: '^/\.well-known/assetlinks\.json$', roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
+        # Démo d'onboarding : asset public (vitrine). On ouvre la route et le seul
+        # LiveComponent OnboardingFlow — les autres composants restent protégés.
+        - { path: '^/ouverture-de-compte', roles: PUBLIC_ACCESS }
+        - { path: '^/_components/OnboardingFlow', roles: PUBLIC_ACCESS }
         - { path: ^/, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }
 

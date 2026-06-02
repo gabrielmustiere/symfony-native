@@ -1,0 +1,81 @@
+<div {{ attributes.defaults({ 'data-controller': 'onboarding', 'data-test': 'onboarding-flow' }) }}>
+    {% form_theme form 'onboarding/_form_theme.html.twig' %}
+
+    {% if completed %}
+        {% include 'components/OnboardingFlow/_success.html.twig' %}
+    {% else %}
+        {% set steps = [
+            { n: 1, label: 'Identité' },
+            { n: 2, label: 'Coordonnées' },
+            { n: 3, label: 'Pièce d\'identité' },
+            { n: 4, label: 'Offre' }
+        ] %}
+
+        {# Barre de progression #}
+        <div class="mb-6">
+            <div class="mb-2 flex items-center justify-between">
+                <p class="font-display text-sm font-semibold text-slate-900 dark:text-white">
+                    Étape {{ step }} sur {{ steps|length }}
+                    <span class="text-slate-400">· {{ steps[step - 1].label }}</span>
+                </p>
+                <button type="button"
+                        data-action="live#action" data-live-action-param="fillExample"
+                        data-test="onboarding-fill-example"
+                        class="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-[#16386b] transition hover:bg-[#0a2540]/5 dark:text-sky-400 dark:hover:bg-white/10">
+                    <twig:ux:icon name="tabler:wand" class="size-4"/>
+                    Remplir un exemple
+                </button>
+            </div>
+            <div class="flex gap-1.5" aria-hidden="true">
+                {% for s in steps %}
+                    <span class="h-1.5 flex-1 rounded-full transition-colors duration-500 {{ s.n <= step ? 'bg-[#0a2540] dark:bg-white' : 'bg-slate-200 dark:bg-slate-700' }}"></span>
+                {% endfor %}
+            </div>
+        </div>
+
+        {{ form_start(form, { attr: { novalidate: 'novalidate', 'data-test': 'onboarding-form' } }) }}
+        <div id="onboarding-step-{{ step }}" class="onboarding-step">
+            {% if step == 1 %}
+                {% include 'components/OnboardingFlow/_step1.html.twig' %}
+            {% elseif step == 2 %}
+                {% include 'components/OnboardingFlow/_step2.html.twig' %}
+            {% elseif step == 3 %}
+                {% include 'components/OnboardingFlow/_step3.html.twig' %}
+            {% elseif step == 4 %}
+                {% include 'components/OnboardingFlow/_step4.html.twig' %}
+            {% endif %}
+        </div>
+
+        {# Navigation — zone d'action en bas, sûre pour le pouce. #}
+        <div class="mt-8 flex items-center gap-3">
+            {% if step > 1 %}
+                <button type="button"
+                        data-action="live#action" data-live-action-param="prev"
+                        data-test="onboarding-prev"
+                        class="flex items-center justify-center gap-1.5 rounded-xl bg-white px-5 py-3.5 text-sm font-semibold text-[#0a2540] ring-1 ring-slate-200 transition hover:bg-slate-50 active:scale-[.99] dark:bg-slate-900 dark:text-white dark:ring-slate-700">
+                    <twig:ux:icon name="tabler:chevron-left" class="size-4"/>
+                    Retour
+                </button>
+            {% endif %}
+
+            {% if step < 4 %}
+                <button type="button"
+                        data-action="live#action" data-live-action-param="next"
+                        data-test="onboarding-next"
+                        class="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#0a2540] px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0a2540]/90 active:scale-[.99] dark:bg-white dark:text-[#0a2540]">
+                    Continuer
+                    <twig:ux:icon name="tabler:chevron-right" class="size-4"/>
+                </button>
+            {% else %}
+                <button type="button"
+                        data-action="live#action" data-live-action-param="submit"
+                        data-test="onboarding-submit"
+                        class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-500 active:scale-[.99]">
+                    <twig:ux:icon name="tabler:circle-check" class="size-5"/>
+                    Finaliser l'ouverture
+                </button>
+            {% endif %}
+        </div>
+        {{ form_end(form, { render_rest: false }) }}
+    {% endif %}
+</div>

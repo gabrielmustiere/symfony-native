@@ -1,0 +1,33 @@
+<div class="space-y-5">
+    <header>
+        <h1 class="font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Faisons connaissance</h1>
+        <p class="mt-1 text-sm text-slate-500">Ces informations figureront sur votre contrat.</p>
+    </header>
+
+    {# Civilité — boutons radio #}
+    <div>
+        <p class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Civilité</p>
+        <div class="grid grid-cols-2 gap-3">
+            {% for choice in form.civility %}
+                <label class="relative block cursor-pointer">
+                    <input type="radio" name="{{ choice.vars.full_name }}" value="{{ choice.vars.value }}"
+                           {{ choice.vars.checked ? 'checked' }}
+                           data-test="civility-{{ choice.vars.value }}"
+                           class="peer sr-only">
+                    <span class="flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition peer-checked:border-[#0a2540] peer-checked:bg-[#0a2540]/5 peer-checked:font-semibold peer-checked:text-[#0a2540] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:peer-checked:border-white dark:peer-checked:bg-white/10 dark:peer-checked:text-white">
+                        {{ choice.vars.label }}
+                    </span>
+                </label>
+            {% endfor %}
+        </div>
+        {{ form_errors(form.civility) }}
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+        {{ form_row(form.firstName, { label: 'Prénom', attr: { placeholder: 'Juliette', autocomplete: 'given-name', 'data-test': 'firstName' } }) }}
+        {{ form_row(form.lastName, { label: 'Nom', attr: { placeholder: 'Lecomte', autocomplete: 'family-name', 'data-test': 'lastName' } }) }}
+    </div>
+
+    {{ form_row(form.birthDate, { label: 'Date de naissance', attr: { 'data-test': 'birthDate' } }) }}
+    {{ form_row(form.nationality, { label: 'Nationalité', attr: { 'data-test': 'nationality' } }) }}
+</div>
